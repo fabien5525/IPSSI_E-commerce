@@ -30,13 +30,6 @@ class Produit
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photo;
 
-    #[ORM\ManyToMany(targetEntity: ContenuPanier::class, mappedBy: 'produit')]
-    private $contenuPaniers;
-
-    public function __construct()
-    {
-        $this->contenuPaniers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -103,30 +96,4 @@ class Produit
         return $this;
     }
 
-    /**
-     * @return Collection|ContenuPanier[]
-     */
-    public function getContenuPaniers(): Collection
-    {
-        return $this->contenuPaniers;
-    }
-
-    public function addContenuPanier(ContenuPanier $contenuPanier): self
-    {
-        if (!$this->contenuPaniers->contains($contenuPanier)) {
-            $this->contenuPaniers[] = $contenuPanier;
-            $contenuPanier->addProduit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContenuPanier(ContenuPanier $contenuPanier): self
-    {
-        if ($this->contenuPaniers->removeElement($contenuPanier)) {
-            $contenuPanier->removeProduit($this);
-        }
-
-        return $this;
-    }
 }

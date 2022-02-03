@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+    <h1>Produit index</h1>
+
+    {{include('produit/_table.html.twig', {'produits':produits})}}
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('produit_new') }}">Create new</a>
+{% endif %}
+{% endblock %}
