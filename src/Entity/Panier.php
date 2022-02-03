@@ -17,11 +17,11 @@ class Panier
     #[ORM\JoinColumn(nullable: false)]
     private $utilisateur;
 
-    #[ORM\Column(type: 'datetime')]
-    private $date;
-
     #[ORM\Column(type: 'boolean')]
     private $etat;
+
+    #[ORM\OneToOne(mappedBy: 'panier', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    private $user;
 
     public function getId(): ?int
     {
@@ -40,18 +40,6 @@ class Panier
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
     public function getEtat(): ?bool
     {
         return $this->etat;
@@ -60,6 +48,23 @@ class Panier
     public function setEtat(bool $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        // set the owning side of the relation if necessary
+        if ($user->getPanier() !== $this) {
+            $user->setPanier($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

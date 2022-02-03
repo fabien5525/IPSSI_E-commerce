@@ -36,13 +36,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Panier::class, orphanRemoval: true)]
-    private $paniers;
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Panier::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $panier;
 
-    public function __construct()
-    {
-        $this->paniers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -136,33 +133,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|Panier[]
-     */
-    public function getPaniers(): Collection
+    public function getPanier(): ?Panier
     {
-        return $this->paniers;
+        return $this->panier;
     }
 
-    public function addPanier(Panier $panier): self
+    public function setPanier(Panier $panier): self
     {
-        if (!$this->paniers->contains($panier)) {
-            $this->paniers[] = $panier;
-            $panier->setUtilisateur($this);
-        }
+        $this->panier = $panier;
 
         return $this;
     }
 
-    public function removePanier(Panier $panier): self
-    {
-        if ($this->paniers->removeElement($panier)) {
-            // set the owning side to null (unless already changed)
-            if ($panier->getUtilisateur() === $this) {
-                $panier->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }
 }
