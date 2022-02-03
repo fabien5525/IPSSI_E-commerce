@@ -13,9 +13,6 @@ class Panier
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'paniers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $utilisateur;
 
     #[ORM\Column(type: 'boolean')]
     private $etat;
@@ -23,21 +20,13 @@ class Panier
     #[ORM\OneToOne(mappedBy: 'panier', targetEntity: User::class, cascade: ['persist', 'remove'])]
     private $user;
 
+    #[ORM\OneToOne(inversedBy: 'panier', targetEntity: ContenuPanier::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $contenuPanier;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUtilisateur(): ?User
-    {
-        return $this->utilisateur;
-    }
-
-    public function setUtilisateur(?User $utilisateur): self
-    {
-        $this->utilisateur = $utilisateur;
-
-        return $this;
     }
 
     public function getEtat(): ?bool
@@ -65,6 +54,18 @@ class Panier
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getContenuPanier(): ?ContenuPanier
+    {
+        return $this->contenuPanier;
+    }
+
+    public function setContenuPanier(ContenuPanier $contenuPanier): self
+    {
+        $this->contenuPanier = $contenuPanier;
 
         return $this;
     }

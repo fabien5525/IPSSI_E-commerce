@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use App\Entity\User;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -74,9 +75,19 @@ class ProduitController extends AbstractController
     #[Route('/{id}', name: 'produit_show', methods: ['GET'])]
     public function show(Produit $produit): Response
     {
+        $form = $this->createForm(ProduitType::class,$produit);
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
+            'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/{id}/ajoutpanier', name:'ajout_panier')]
+    public function ajoutPanier(Produit $produit, EntityManagerInterface $entityManager, #[CurrentUser] User $user)
+    {
+        $panier= $user->getPanier()->getContenuPanier();
+        $panier->addProduit($produit);
+
     }
 
     #[Route('/{id}/edit', name: 'produit_edit', methods: ['GET', 'POST'])]

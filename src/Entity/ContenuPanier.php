@@ -18,14 +18,15 @@ class ContenuPanier
     #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'contenuPaniers')]
     private $produit;
 
-    #[ORM\OneToOne(targetEntity: Panier::class, cascade: ['persist', 'remove'])]
-    private $panier;
 
     #[ORM\Column(type: 'integer')]
     private $quantite;
 
     #[ORM\Column(type: 'datetime')]
     private $date;
+
+    #[ORM\OneToOne(mappedBy: 'contenuPanier', targetEntity: Panier::class, cascade: ['persist', 'remove'])]
+    private $panier;
 
     public function __construct()
     {
@@ -61,18 +62,6 @@ class ContenuPanier
         return $this;
     }
 
-    public function getPanier(): ?Panier
-    {
-        return $this->panier;
-    }
-
-    public function setPanier(?Panier $panier): self
-    {
-        $this->panier = $panier;
-
-        return $this;
-    }
-
     public function getQuantite(): ?int
     {
         return $this->quantite;
@@ -93,6 +82,23 @@ class ContenuPanier
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPanier(): ?Panier
+    {
+        return $this->panier;
+    }
+
+    public function setPanier(Panier $panier): self
+    {
+        // set the owning side of the relation if necessary
+        if ($panier->getContenuPanier() !== $this) {
+            $panier->setContenuPanier($this);
+        }
+
+        $this->panier = $panier;
 
         return $this;
     }
