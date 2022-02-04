@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Panier;
 use App\Form\RegistrationFormType;
+use App\Form\UserType;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Security\AuthAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+
 
 class RegistrationController extends AbstractController
 {
@@ -51,5 +56,33 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/register/{id}', name: 'modif_profil')]
+    public function show(User $user = null, Request $r, ManagerRegistry $d, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $t){
+        if($user ==null){
+            $this->addFlash('danger', $t->trans('Utilisateur.inconnue'));
+            return $this->redirectToRoute('home');
+        }
+
+        $form =$this->createForm(UserType::class, $user);
+        $form->handleRequest($r);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em = $d->getManager();
+            $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,  $form->get('password')->getData()
+            ));
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('success', $t->trans('Utilisateur.maj'));
+        }
+
+        return $this->render('registration/profil.html.twig', [
+            'form' =>$form->createView()
+        ]);
+
     }
 }

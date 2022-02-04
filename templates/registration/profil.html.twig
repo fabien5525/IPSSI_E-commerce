@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+{% block title %}{{'Profil'|trans}}{% endblock %}
+{% block body %}
+    <h1>{{'Profil'|trans}}</h1>
+    {{form(form)}}
+
+    <a href="{{ path('home') }}">{{'back'|trans}}</a>
+{% endblock %}

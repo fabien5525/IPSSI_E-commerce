@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{'Panier'|trans}}{% endblock %}
+
+{% block body %}
+     <table class="table">
+        <thead>
+            <tr>
+                <th>{{'Produit.produit'|trans}}</th>
+                <th>{{'Quantite'|trans}}</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for panier in paniers %}
+            <tr>
+                <td>{{ panier.produit.nom }}</td>
+                <td>{{ panier.quantite }}</td>
+                <td>{{ panier.dateAjout }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">{{'PanierV'|trans}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{{form(commande)}}
+{% endblock %}
