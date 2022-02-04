@@ -2,15 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Produit;
 use App\Entity\User;
+use App\Entity\Produit;
 use App\Form\ProduitType;
+use App\Entity\ProduitPanier;
+use App\Form\ProduitPanierType;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/produit')]
 class ProduitController extends AbstractController
@@ -37,7 +41,7 @@ class ProduitController extends AbstractController
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($imageFile) {
-                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
 
                 // Move the file to the directory where brochures are stored
                 try {
@@ -73,21 +77,31 @@ class ProduitController extends AbstractController
     }
 
     #[Route('/{id}', name: 'produit_show', methods: ['GET'])]
-    public function show(Produit $produit): Response
+    public function show(Produit $produit, EntityManagerInterface $em, Request $request, TranslatorInterface $t): Response
     {
-        $form = $this->createForm(ProduitType::class,$produit);
+        $produitPanier = new ProduitPanier();
+        $form = $this->createForm(ProduitPanierType::class, $produitPanier);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($produitPanier->getQuantite() > 0 || $produitPanier->getQuantite() <= $produit->getStock()) {
+                //C'est bon
+                $produitPanier->setDateAjout(new \DateTime());
+                $produitPanier->setProduit($produit);
+                $em->persist($produitPanier);
+                $em->flush();
+                //Message FLASH C BON
+                $this->addFlash("success", $t->trans('ProduitPanier.success') . '(' . $produitPanier->getQuantite() . ')');
+            } else {
+                //C'est pas bon
+                //Message FLASH C PAS BON
+                $this->addFlash('danger', $t->trans('ProduitPanier.danger'));
+            }
+        }
+
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
             'form' => $form->createView()
         ]);
-    }
-
-    #[Route('/{id}/ajoutpanier', name:'ajout_panier')]
-    public function ajoutPanier(Produit $produit, EntityManagerInterface $entityManager, #[CurrentUser] User $user)
-    {
-        $panier= $user->getPanier()->getContenuPanier();
-        $panier->addProduit($produit);
-
     }
 
     #[Route('/{id}/edit', name: 'produit_edit', methods: ['GET', 'POST'])]
@@ -111,7 +125,7 @@ class ProduitController extends AbstractController
     #[Route('/{id}', name: 'produit_delete', methods: ['POST'])]
     public function delete(Request $request, Produit $produit, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $produit->getId(), $request->request->get('_token'))) {
             $entityManager->remove($produit);
             $entityManager->flush();
         }

@@ -13,6 +13,8 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "composer update && yarn install && php bin/console d:d:c && php bin/console d:m:m -n",
+        "rebuild" : "del .\\migrations\\*.php && php bin/console doctrine:schema:drop --full-database --force && php bin/console make:migration && php bin/console d:m:m -n",
+        "start": "yarn dev && symfony serve"
     }
 }

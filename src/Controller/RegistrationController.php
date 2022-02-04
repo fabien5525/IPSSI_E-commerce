@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Panier;
-use App\Entity\ContenuPanier;
 use App\Form\RegistrationFormType;
 use App\Security\AuthAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,12 +34,9 @@ class RegistrationController extends AbstractController
             $panier = new Panier();
             $panier->setEtat(false);
             $panier->setUser($user);
-            $contenuPanier = new ContenuPanier();
-            $contenuPanier->setPanier($panier);
-            $panier->setContenuPanier($contenuPanier);
             $user->setPanier($panier);
+
             $entityManager->persist($panier);
-            $entityManager->persist($contenuPanier);
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email

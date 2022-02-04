@@ -20,9 +20,6 @@ class Panier
     #[ORM\OneToOne(mappedBy: 'panier', targetEntity: User::class, cascade: ['persist', 'remove'])]
     private $user;
 
-    #[ORM\OneToOne(inversedBy: 'panier', targetEntity: ContenuPanier::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private $contenuPanier;
 
     public function getId(): ?int
     {
@@ -58,15 +55,4 @@ class Panier
         return $this;
     }
 
-    public function getContenuPanier(): ?ContenuPanier
-    {
-        return $this->contenuPanier;
-    }
-
-    public function setContenuPanier(ContenuPanier $contenuPanier): self
-    {
-        $this->contenuPanier = $contenuPanier;
-
-        return $this;
-    }
 }
