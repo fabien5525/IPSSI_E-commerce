@@ -4,7 +4,7 @@ Agree terms: Accepter les termes
 Prix: Prix
 Photo: Photo
 Connecter: Se connecter
-Créer: S'inscrire
+Creer: S'inscrire
 show: Afficher
 edit: Modifier
 back: Retour sur la liste
@@ -16,6 +16,11 @@ Logout: Se déconnecter
 Register: S'incrire
 Password: Mot de passe
 Quantite: Quantité
+ModifProfil: Modifier son profil
+Profil: Profil
+Panier: Panier
+PanierV: Panier vide
+Commander: Commander
 
 ProduitPanier:
   success: Le produit a bien été ajouté au panier 
@@ -31,3 +36,8 @@ Produit:
   creer: Créer un nouveau
   produit: Produit
   new: Créer un nouveau produit
+
+  Utilisateur:
+    inconnue: Utilisateur introuvable
+    maj: Utilisateur mis à jour
+    

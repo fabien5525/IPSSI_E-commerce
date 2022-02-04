@@ -16,6 +16,11 @@ Logout: Log out
 Register: Register
 Password: Password
 Quantite: Quantity
+ModifProfil: Modify your account
+Profil: User
+Panier: Cart
+PanierV: Empty cart
+Commander: Purchase
 
 ProduitPanier:
   success: The product has been add to the cart
@@ -31,3 +36,8 @@ Produit:
   creer: Create new
   produit: Product
   new: Create a new product
+
+  Utilisateur:
+    inconnue: Unknown user
+    maj: User updated
+    
