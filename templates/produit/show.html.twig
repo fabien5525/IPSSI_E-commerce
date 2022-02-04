@@ -51,10 +51,10 @@
 	{% if app.user is not null %}
 		{{form_start(form)}}
 		{{form_row(form.quantite), {
-        label : 'ProduitPanier.quantite'
+        label : 'Quantite'
     }}}
 		{{form_row(form.ajouter), {
-        label : 'Ajouter'
+        label : 'ajouter'
     }}}
 		{{form_end(form)}}
 	{% endif %}

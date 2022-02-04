@@ -15,12 +15,12 @@ save: Save
 Logout: Log out
 Register: Register
 Password: Password
-
+Quantite: Quantity
 
 ProduitPanier:
   success: The product has been add to the cart
   danger: The quantity is not valid
-  quantite: Quantité
+  
 
 Login:
   please: Please log in

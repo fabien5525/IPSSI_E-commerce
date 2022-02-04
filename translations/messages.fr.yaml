@@ -15,11 +15,12 @@ save: Sauvegarder
 Logout: Se déconnecter
 Register: S'incrire
 Password: Mot de passe
+Quantite: Quantité
 
 ProduitPanier:
   success: Le produit a bien été ajouté au panier 
   danger: La quantité indiquée n'est pas valide
-  quantite: Quantité
+  
 
 Login:
   please: Connectez-vous s'il vous plaît
