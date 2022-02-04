@@ -13,8 +13,14 @@ class Commande
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @Assert\NotNull
+     */
     #[ORM\Column(type: 'datetime')]
     private $dateAchat;
+
+    #[ORM\Column(type: 'float')]
+    private $montantTotal;
 
 
     public function getId(): ?int
@@ -34,4 +40,15 @@ class Commande
         return $this;
     }
 
+    public function getMontantTotal(): ?float
+    {
+        return $this->montantTotal;
+    }
+
+    public function setMontantTotal(float $montantTotal): self
+    {
+        $this->montantTotal = $montantTotal;
+
+        return $this;
+    }
 }

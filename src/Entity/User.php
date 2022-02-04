@@ -3,12 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Panier;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
@@ -21,21 +21,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @Assert\NotNull
+     */
     #[ORM\Column(type: 'string', length: 250)]
     private $nom;
 
+    /**
+     * @Assert\NotNull
+     */
     #[ORM\Column(type: 'string', length: 250)]
     private $prenom;
 
+    /**
+     * @Assert\NotNull
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
+     */
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
+    /**
+     * @Assert\NotNull
+     */
     #[ORM\Column(type: 'string')]
     private $password;
 
+    /**
+     * @Assert\NotNull
+     */
     #[ORM\OneToOne(inversedBy: 'user', targetEntity: Panier::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private $panier;
@@ -144,5 +160,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }
