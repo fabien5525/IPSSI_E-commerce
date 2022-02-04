@@ -1,0 +1,33 @@
+Nom: Name
+Prenom: First name
+Agree terms: Agree terms
+Prix: Price
+Photo: Picture
+Connecter: Log in
+Creer: Sign in
+show: Show
+edit: Edit
+back: Back to list
+ajouter: Add to cart
+Delete: Delete
+Image (JPG, PNG): Picture (JPG, PNG)
+save: Save
+Logout: Log out
+Register: Register
+Password: Password
+Quantite: Quantity
+
+ProduitPanier:
+  success: The product has been add to the cart
+  danger: The quantity is not valid
+  
+
+Login:
+  please: Please log in
+  paswd: Password
+  Urlog: You are logged in as 
+
+Produit:
+  creer: Create new
+  produit: Product
+  new: Create a new product
