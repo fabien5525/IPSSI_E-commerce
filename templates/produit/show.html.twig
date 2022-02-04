@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{'Produit.produit'|trans}}
+	{{produit.id}}
+{% endblock %}
+
+{% block body %}
+	<h1>{{'Produit.produit'|trans}}</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ produit.id }}</td>
+			</tr>
+			<tr>
+				<th>{{'Nom'|trans}}</th>
+				<td>{{ produit.nom }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ produit.description }}</td>
+			</tr>
+			<tr>
+				<th>{{'Prix'|trans}}</th>
+				<td>{{ produit.prix }}</td>
+			</tr>
+			<tr>
+				<th>Stock</th>
+				<td>{{ produit.stock }}</td>
+			</tr>
+			<tr>
+				<th>{{'Photo'|trans}}</th>
+				<td>
+					{% if produit.photo is not empty %}
+						<img src="{{ asset('/uploads/'~produit.photo) }}" style="width: 100px;">
+					{% endif %}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('produit_index') }}">{{'back'|trans}}</a>
+
+	{% if is_granted('ROLE_ADMIN') %}
+		<a href="{{ path('produit_edit', {'id': produit.id}) }}">{{'edit'|trans}}</a>
+		{{ include('produit/_delete_form.html.twig') }}
+	{% endif %}
+
+	{% if app.user is not null %}
+		{{form_start(form)}}
+		{{form_row(form.quantite), {
+        label : 'Quantite'
+    }}}
+		{{form_row(form.ajouter), {
+        label : 'ajouter'
+    }}}
+		{{form_end(form)}}
+	{% endif %}
+{% endblock %}
