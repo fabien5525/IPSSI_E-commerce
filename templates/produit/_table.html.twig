@@ -2,12 +2,12 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Nom</th>
+                <th>{{'Nom'|trans}}</th>
                 <th>Description</th>
-                <th>Prix</th>
+                <th>{{'Prix'|trans}}</th>
                 <th>Stock</th>
-                <th>Photo</th>
-                <th>actions</th>
+                <th>{{'Photo'|trans}}</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -24,9 +24,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('produit_show', {'id': produit.id}) }}">show</a>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">{{'show'|trans}}</a>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a>
+                        <a href="{{ path('produit_edit', {'id': produit.id}) }}">{{'edit'|trans}}</a>
                     {% endif %}
                 </td>
             </tr>

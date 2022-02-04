@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produit{% endblock %}
+{% block title %}{{'Produit.produit'|trans}} {{produit.id}}{% endblock %}
 
 {% block body %}
-    <h1>Produit</h1>
+    <h1>{{'Produit.produit'|trans}}</h1>
 
     <table class="table">
         <tbody>
@@ -12,7 +12,7 @@
                 <td>{{ produit.id }}</td>
             </tr>
             <tr>
-                <th>Nom</th>
+                <th>{{'Nom'|trans}}</th>
                 <td>{{ produit.nom }}</td>
             </tr>
             <tr>
@@ -20,7 +20,7 @@
                 <td>{{ produit.description }}</td>
             </tr>
             <tr>
-                <th>Prix</th>
+                <th>{{'Prix'|trans}}</th>
                 <td>{{ produit.prix }}</td>
             </tr>
             <tr>
@@ -28,7 +28,7 @@
                 <td>{{ produit.stock }}</td>
             </tr>
             <tr>
-                <th>Photo</th>
+                <th>{{'Photo'|trans}}</th>
                 <td>{% if produit.photo is not empty %}
                         <img src="{{ asset('/uploads/'~produit.photo) }}" style="width: 100px;">
                     {% endif %}</td>
@@ -36,15 +36,17 @@
         </tbody>
     </table>
 
-    <a href="{{ path('produit_index') }}">back to list</a>
+    <a href="{{ path('produit_index') }}">{{'back'|trans}}</a>
 
     
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a>
+        <a href="{{ path('produit_edit', {'id': produit.id}) }}">{{'edit'|trans}}</a>
     
 
         {{ include('produit/_delete_form.html.twig') }}
     {% endif %}
-    <a href="{{ path('ajout_panier', {'id': produit.id }) }}">Ajouter au panier</a>
 
+    {% if app.user is not null %}
+        <a href="{{ path('ajout_panier', {'id': produit.id }) }}">{{'ajouter'|trans}}</a>
+    {% endif %}
 {% endblock %}

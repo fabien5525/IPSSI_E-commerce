@@ -1,0 +1,32 @@
+Nom: Nom
+Prenom: Prénom
+Agree terms: Accepter les termes
+Prix: Prix
+Photo: Photo
+Connecter: Se connecter
+Créer: S'inscrire
+show: Afficher
+edit: Modifier
+back: Retour sur la liste
+ajouter: Ajouter au panier
+Delete: Supprimer
+Image (JPG, PNG): Image (JPG, PNG)
+save: Sauvegarder
+Logout: Se déconnecter
+Register: S'incrire
+Password: Mot de passe
+
+ProduitPanier:
+  success: Le produit a bien été ajouté au panier 
+  danger: La quantité indiquée n'est pas valide
+  quantite: Quantité
+
+Login:
+  please: Connectez-vous s'il vous plaît
+  paswd: Mot de passe
+  Urlog: Vous êtes connecté en tant que 
+
+Produit:
+  creer: Créer un nouveau
+  produit: Produit
+  new: Créer un nouveau produit
