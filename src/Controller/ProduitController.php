@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use Monolog\Logger;
 use App\Entity\User;
 use App\Entity\Produit;
 use App\Form\ProduitType;
+use Psr\Log\LoggerInterface;
 use App\Entity\ProduitPanier;
 use App\Form\ProduitPanierType;
+use Monolog\Handler\StreamHandler;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,12 +63,10 @@ class ProduitController extends AbstractController
                 $produit->setPhoto($newFilename);
             }
 
-
-
-
-
             $entityManager->persist($produit);
             $entityManager->flush();
+
+            $this->addFlash('success', 'salut');
 
             return $this->redirectToRoute('produit_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -76,28 +77,30 @@ class ProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'produit_show', methods: ['GET'])]
-    public function show(Produit $produit, EntityManagerInterface $em, Request $request, TranslatorInterface $t): Response
+    #[Route('/{id}', name: 'produit_show', methods: ['GET', 'POST'])]
+    public function show(Produit $produit, EntityManagerInterface $em, Request $request, TranslatorInterface $t, #[CurrentUser] User $user): Response
     {
         $produitPanier = new ProduitPanier();
         $form = $this->createForm(ProduitPanierType::class, $produitPanier);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash("success", "test");
             if ($produitPanier->getQuantite() > 0 || $produitPanier->getQuantite() <= $produit->getStock()) {
                 //C'est bon
+                $produitPanier->setPanier($user->getPanier());
                 $produitPanier->setDateAjout(new \DateTime());
                 $produitPanier->setProduit($produit);
                 $em->persist($produitPanier);
                 $em->flush();
                 //Message FLASH C BON
                 $this->addFlash("success", $t->trans('ProduitPanier.success') . '(' . $produitPanier->getQuantite() . ')');
+                return $this->redirectToRoute('produit_index', [], Response::HTTP_ACCEPTED);
             } else {
                 //C'est pas bon
-                //Message FLASH C PAS BON
-                $this->addFlash('danger', $t->trans('ProduitPanier.danger'));
+                $this->addFlash('danger', $t->trans('ProduitPanier.danger') . '(' . $produitPanier->getQuantite() . ')');
+                return $this->redirectToRoute('produit_index', [], Response::HTTP_NOT_ACCEPTABLE);
             }
         }
-
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
             'form' => $form->createView()
