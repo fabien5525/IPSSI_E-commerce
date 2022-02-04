@@ -19,6 +19,17 @@ class PanierRepository extends ServiceEntityRepository
         parent::__construct($registry, Panier::class);
     }
 
+    public function PanierNonPaye()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.etat = :val')
+            ->setParameter('val', false)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Panier[] Returns an array of Panier objects
     //  */
