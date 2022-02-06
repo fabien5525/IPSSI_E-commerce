@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Monolog\Logger;
 use App\Entity\User;
 use App\Entity\Produit;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -78,27 +80,35 @@ class ProduitController extends AbstractController
     }
 
     #[Route('/{id}', name: 'produit_show', methods: ['GET', 'POST'])]
-    public function show(Produit $produit, EntityManagerInterface $em, Request $request, TranslatorInterface $t, #[CurrentUser] User $user): Response
+    public function show(Produit $produit, EntityManagerInterface $em, Request $request, TranslatorInterface $t): Response
     {
         $produitPanier = new ProduitPanier();
+        /** @var \User */
+        $user = $this->getUser();
+
+        $produitPanier->setPanier($user->getPanier());
+        $produitPanier->setDateAjout(new \DateTime());
+        $produitPanier->setProduit($produit);
+
         $form = $this->createForm(ProduitPanierType::class, $produitPanier);
         $form->handleRequest($request);
+
+        $this->addFlash("success", ($user->getPanier() != null));
+        //dd($user->getPanier());
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash("success", "test");
-            if ($produitPanier->getQuantite() > 0 || $produitPanier->getQuantite() <= $produit->getStock()) {
+            $qt = $form->get('quantite')->getData();
+            if ($qt > 0 || $qt <= $produit->getStock()) {
                 //C'est bon
-                $produitPanier->setPanier($user->getPanier());
-                $produitPanier->setDateAjout(new \DateTime());
-                $produitPanier->setProduit($produit);
+                $produitPanier->setQuantite($qt);
                 $em->persist($produitPanier);
                 $em->flush();
                 //Message FLASH C BON
                 $this->addFlash("success", $t->trans('ProduitPanier.success') . '(' . $produitPanier->getQuantite() . ')');
-                return $this->redirectToRoute('produit_index', [], Response::HTTP_ACCEPTED);
+                return $this->redirectToRoute('produit_index');
             } else {
                 //C'est pas bon
                 $this->addFlash('danger', $t->trans('ProduitPanier.danger') . '(' . $produitPanier->getQuantite() . ')');
-                return $this->redirectToRoute('produit_index', [], Response::HTTP_NOT_ACCEPTABLE);
+                return $this->redirectToRoute('produit_index');
             }
         }
         return $this->render('produit/show.html.twig', [

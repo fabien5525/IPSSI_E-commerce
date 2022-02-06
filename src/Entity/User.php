@@ -35,7 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @Assert\NotNull
-     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
      */
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
@@ -43,9 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
-    /**
-     * @Assert\NotNull
-     */
     #[ORM\Column(type: 'string')]
     private $password;
 
@@ -55,6 +51,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'user', targetEntity: Panier::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private $panier;
+
+    public function __construct()
+    {
+        $this->panier = new panier();
+    }
 
 
     public function getId(): ?int

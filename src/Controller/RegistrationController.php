@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AuthAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -59,21 +59,24 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/{id}', name: 'modif_profil')]
-    public function show(User $user = null, Request $r, ManagerRegistry $d, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $t){
-        if($user ==null){
+    public function show(User $user = null, Request $r, ManagerRegistry $d, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $t)
+    {
+        if ($user == null) {
             $this->addFlash('danger', $t->trans('Utilisateur.inconnue'));
             return $this->redirectToRoute('home');
         }
 
-        $form =$this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($r);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $d->getManager();
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                $user,  $form->get('password')->getData()
-            ));
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
             $em->persist($user);
             $em->flush();
 
@@ -81,8 +84,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/profil.html.twig', [
-            'form' =>$form->createView()
+            'form' => $form->createView()
         ]);
-
     }
 }
