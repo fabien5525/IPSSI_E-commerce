@@ -21,6 +21,7 @@ Profil: User
 Panier: Cart
 PanierV: Empty cart
 Commander: Purchase
+SuperAdmin: Super Admin access
 
 ProduitPanier:
   success: The product has been add to the cart

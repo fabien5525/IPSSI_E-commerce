@@ -15,4 +15,8 @@
     {% else %}
         <a href="{{path('modif_profil', {'id':app.user.id})}}">{{'ModifProfil'|trans}}</a>
     {% endif %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <a href="">{{'SuperAdmin'|trans}}</a>
+    {% endif %}
 {% endblock %}

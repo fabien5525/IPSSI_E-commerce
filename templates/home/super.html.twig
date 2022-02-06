@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block title %}New Users{% endblock %}
+
+{% block body %}
+    <h1>Liste users</h1>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>{{'Nom'|trans}}</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.nom }}</td>
+                <td>{{ u.prenom }}</td>
+                <td>{{ u.email }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Liste Panier</h1>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Etat</th>
+                <th>User</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in paniers %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.etat }}</td>
+                <td>{{ p.user.email }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+
+    <a href="{{ path('home') }}">back to list</a>
+{% endblock %}

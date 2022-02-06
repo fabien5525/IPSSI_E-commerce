@@ -21,6 +21,7 @@ Profil: Profil
 Panier: Panier
 PanierV: Panier vide
 Commander: Commander
+SuperAdmin: Accès Super Admin
 
 ProduitPanier:
   success: Le produit a bien été ajouté au panier 
