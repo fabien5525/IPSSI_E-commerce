@@ -23,6 +23,8 @@ PanierV: Empty cart
 Commander: Purchase
 SuperAdmin: Super Admin access
 
+Home: Home
+
 ProduitPanier:
   success: The product has been add to the cart
   danger: The quantity is not valid

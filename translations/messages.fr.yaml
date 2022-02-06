@@ -23,6 +23,8 @@ PanierV: Panier vide
 Commander: Commander
 SuperAdmin: Accès Super Admin
 
+Home: Accueil
+
 ProduitPanier:
   success: Le produit a bien été ajouté au panier 
   danger: La quantité indiquée n'est pas valide

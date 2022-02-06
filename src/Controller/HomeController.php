@@ -30,7 +30,11 @@ class HomeController extends AbstractController
         $em = $d->getManager();
 
         $users= $em->getRepository(User::class)->findAll();
-        $paniers = $em->getRepository(Panier::class)->PanierNonPaye();
+        /**
+         * @var PanierRepository
+         */
+        $panierRepo = $em->getRepository(Panier::class);
+        $paniers = $panierRepo->PanierNonPaye();
         return $this->render('home/super.html.twig', [
             'users' => $users,
             'paniers' => $paniers
